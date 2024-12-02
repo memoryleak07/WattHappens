@@ -1,0 +1,44 @@
+﻿@using System.Globalization
+@using WattHappens.Application.Constants
+@using WattHappens.Domain.Entities
+
+<MudPaper Class="pa-4">
+        <MudDialog>
+            <DialogContent>
+                <MudSelect T="EnCategory" Label="Category" @bind-Value="_appliance.Category" Required="true">
+                    @foreach (var category in Enum.GetValues<EnCategory>())
+                    {
+                        <MudSelectItem Value="@(category)">@category.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudTextField @bind-Value="_appliance.Name" Required="true" Label="Name" Adornment="Adornment.End" AdornmentText="Name" AdornmentColor="Color.Info"/>
+                <MudTextField @bind-Value="_appliance.Quantity" Required="true" Label="Quantity" Adornment="Adornment.End" AdornmentText="Number" AdornmentColor="Color.Info"/>
+                <MudTextField @bind-Value="_appliance.WattPowerConsumption" Required="true" Label="Watt Power Consumption" Adornment="Adornment.End" AdornmentText="Watt" AdornmentColor="Color.Info"/>
+                <MudTextField @bind-Value="_appliance.HoursUsedPerDay" Required="true" Label="Hours Used Per Day" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Timelapse" AdornmentColor="Color.Info"/>
+                @* <MudSlider Value="@((decimal)_appliance.HoursUsedPerDay)" ValueLabel="true" Step="0.1m" Culture="@CultureInfo.CurrentCulture" ValueLabelFormat="00.00" /> *@
+                <MudTextField @bind-Value="_appliance.DaysUsedPerMonth" Required="false" Label="Days Used Per Month" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.DateRange" AdornmentColor="Color.Info"/>
+            </DialogContent>
+            <DialogActions>
+                <MudButton OnClick="Cancel">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="Submit">Save</MudButton>
+            </DialogActions>
+
+        </MudDialog>
+</MudPaper>
+
+@code 
+{
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public Appliance Appliance { get; set; } = default!;
+    [Parameter] public bool IsEditMode { get; set; }
+
+    private Appliance _appliance = default!;
+    
+    protected override void OnInitialized()
+    {
+        _appliance = Appliance;
+    }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(_appliance));
+    private void Cancel() => MudDialog.Cancel();
+}

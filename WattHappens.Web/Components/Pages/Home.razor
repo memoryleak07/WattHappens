@@ -1,0 +1,167 @@
+﻿@page "/"
+
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject ApplicationDbContext DbContext
+@inject ProcessingStateContainer ProcessingState
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+@using WattHappens.Application.Common
+@using WattHappens.Application.Utilities
+@using WattHappens.Domain.Entities
+@using WattHappens.Infrastructure.Data
+@using WattHappens.Web.Components.Shared
+
+<PageTitle>Home</PageTitle>
+
+<MudStack Style="width: 100%">
+
+    <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
+    <MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 8 Template!</MudText>
+    
+    <MudButton @onclick="AddApplianceAsync" 
+               Variant="Variant.Filled" 
+               Color="Color.Primary">
+        Add Appliance
+    </MudButton>
+    
+    @if (!Appliances.Any())
+    {
+        <MudText Typo="Typo.h6">No appliances found.</MudText>
+    }
+    else
+    {
+        <MudGrid>
+            @foreach (var appliance in Appliances)
+            {
+                <MudItem xl="3" lg="3" md="6" xs="12">
+                    <MudCard Outlined="true">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@appliance.Name</MudText>
+                            </CardHeaderContent>
+                            <CardHeaderAvatar>
+                                <MudChip T="string" 
+                                         Icon="@Icons.Material.Filled.Power" 
+                                         Color="Color.Transparent">
+                                    @appliance.WattPowerConsumption W
+                                </MudChip>
+                            </CardHeaderAvatar>
+                            <CardHeaderActions>
+                                <MudIconButton OnClick="@(async () => await EditApplianceAsync(@appliance))"
+                                               Icon="@Icons.Material.Filled.Edit"
+                                               Size="Size.Small"
+                                               Color="Color.Default"/>
+                                <MudIconButton OnClick="@(async () => await RemoveApplianceAsync(@appliance))"
+                                               Icon="@Icons.Material.Filled.Delete"
+                                               Size="Size.Small"
+                                               Color="Color.Default"/>
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText>@appliance.Category.ToString()</MudText>
+                            <MudText Typo="Typo.body2">@appliance.Note</MudText>
+                            <MudChart ChartType="ChartType.Donut" Width="130px" Height="130px" InputData="@data" ChartOptions="@(new ChartOptions { ShowLegend = false })" >
+                                <CustomGraphics>
+                                    <text class="donut-inner-text" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="6">@data.Sum().ToString()</text>
+                                    <text class="donut-inner-text" x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="3">min</text>
+                                </CustomGraphics>
+                            </MudChart>
+                        </MudCardContent>
+                        <MudDivider />
+                        <MudCardActions Style="background-color: #A5D6A7">
+                            <MudChip T="string" Icon="@Icons.Material.Filled.EnergySavingsLeaf" Color="Color.Transparent">
+                                @(Calculations.KilowattConsumptionPerDay(appliance.WattPowerConsumption, appliance.HoursUsedPerDay)) kWh
+                            </MudChip>
+                            <MudChip T="string" Icon="@Icons.Material.Filled.Euro" Color="Color.Transparent">
+                                @(Calculations.CostPerDay(appliance.WattPowerConsumption, appliance.HoursUsedPerDay, _cost))
+                            </MudChip>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+</MudStack>
+
+@code
+{
+    private ICollection<Appliance> Appliances { get; set; } = new List<Appliance>();
+    private double _cost;
+    
+    public double[] data = { 10, 90 };
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var price = await DbContext.Price.FirstOrDefaultAsync();
+        if (price == null)
+        {
+            NavigationManager.NavigateTo("/settings");
+            return;
+        }
+        _cost = price.Cost;
+        Appliances = await DbContext.Appliances.ToListAsync();
+    }
+    
+    private async Task RemoveApplianceAsync(Appliance appliance)
+    {
+        try
+        {
+            DbContext.Appliances.Remove(appliance);
+            await DbContext.SaveChangesAsync();
+            Appliances.Remove(appliance);
+            Snackbar.Add("Success!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"{ex.Message}. {ex.InnerException?.Message}", Severity.Error);
+        }
+
+    }
+    
+    private async Task AddApplianceAsync()
+    {
+        var dialog = await DialogService.ShowAsync<ApplianceDialogComponent>(
+            "Add Appliance", 
+            new DialogParameters { ["Appliance"] = new Appliance() },
+            new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true});
+        
+        var result = await dialog.Result;
+        if (result == null || result.Canceled) return;
+        
+        var newAppliance = (Appliance?)result.Data;
+        if (newAppliance == null)
+        {
+            Snackbar.Add("Error mapping item.", Severity.Error);
+            return;
+        }
+
+        await DbContext.Appliances.AddAsync(newAppliance);
+        await DbContext.SaveChangesAsync();
+        Appliances.Add(newAppliance);
+        Snackbar.Add("Success!", Severity.Success);
+    }
+
+    private async Task EditApplianceAsync(Appliance appliance)
+    {
+        var dialog = await DialogService.ShowAsync<ApplianceDialogComponent>(
+            "Edit Appliance", 
+            new DialogParameters { ["Appliance"] = appliance }, 
+            new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true});
+        
+        var result = await dialog.Result;
+        if (result == null || result.Canceled) return;
+
+        var updatedAppliance = (Appliance?)result.Data;
+        if (updatedAppliance == null)
+        {
+            Snackbar.Add("Error mapping item.", Severity.Error);
+            return;
+        }
+
+        DbContext.Appliances.Update(updatedAppliance);
+        await DbContext.SaveChangesAsync();
+        Snackbar.Add("Success!", Severity.Success);
+    }
+}

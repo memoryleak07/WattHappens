@@ -1,0 +1,6 @@
+﻿services:
+  watthappens.web:
+    image: watthappens.web
+    build:
+      context: .
+      dockerfile: WattHappens.Web/Dockerfile
