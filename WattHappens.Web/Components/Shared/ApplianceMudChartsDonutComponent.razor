@@ -1,0 +1,55 @@
+@using WattHappens.Domain.Entities
+
+<MudChart ChartType="ChartType.Donut"
+          InputData="@(new[] { Appliance.HoursUsedPerDay, 24 - Appliance.HoursUsedPerDay })"
+          Width="110px"
+          Height="110px"
+          ChartOptions="@(new ChartOptions { ShowLegend = false, ChartPalette = ["#478778", "#B2BEB5"] })">
+    <CustomGraphics>
+        <text class="donut-inner-text" x="50%" y="50%" dominant-baseline="middle"
+              text-anchor="middle" fill="black" font-family="Helvetica" font-size="8">
+            @(Appliance.HoursUsedPerDay >= 1 ? Appliance.HoursUsedPerDay : Appliance.HoursUsedPerDay * 60)
+        </text>
+        <text class="donut-inner-text" x="50%" y="65%" dominant-baseline="middle"
+              text-anchor="middle" fill="black" font-family="Helvetica" font-size="3.5">
+            @(Appliance.HoursUsedPerDay >= 1 ? "hr/day" : "min/day")
+        </text>
+    </CustomGraphics>
+</MudChart>
+<MudChart ChartType="ChartType.Donut"
+          InputData="@(new[] { Appliance.DaysUsedPerWeek, 7 - Appliance.DaysUsedPerWeek })"
+          Width="110px"
+          Height="110px"
+          ChartOptions="@(new ChartOptions { ShowLegend = false, ChartPalette = ["#478778", "#B2BEB5"] })">
+    <CustomGraphics>
+        <text class="donut-inner-text" x="50%" y="50%" dominant-baseline="middle"
+              text-anchor="middle" fill="black" font-family="Helvetica" font-size="8">
+            @(Appliance.DaysUsedPerWeek)
+        </text>
+        <text class="donut-inner-text" x="50%" y="65%" dominant-baseline="middle"
+              text-anchor="middle" fill="black" font-family="Helvetica" font-size="3.5">
+            @(Appliance.DaysUsedPerWeek > 1 ? "days/week" : "day/week")
+        </text>
+    </CustomGraphics>
+</MudChart>
+<MudChart ChartType="ChartType.Donut"
+          InputData="@(new[] { Appliance.DaysUsedPerMonth, 30 - Appliance.DaysUsedPerMonth })"
+          Width="110px"
+          Height="110px"
+          ChartOptions="@(new ChartOptions { ShowLegend = false, ChartPalette = ["#478778", "#B2BEB5"] })">
+    <CustomGraphics>
+        <text class="donut-inner-text" x="50%" y="50%" dominant-baseline="middle"
+              text-anchor="middle" fill="black" font-family="Helvetica" font-size="8">
+            @(Appliance.DaysUsedPerMonth)
+        </text>
+        <text class="donut-inner-text" x="50%" y="65%" dominant-baseline="middle"
+              text-anchor="middle" fill="black" font-family="Helvetica" font-size="3.5">
+            @(Appliance.DaysUsedPerMonth > 1 ? "days/month" : "day/month")
+        </text>
+    </CustomGraphics>
+</MudChart>
+
+@code 
+{
+    [Parameter] public Appliance Appliance { get; set; } = default!;
+}

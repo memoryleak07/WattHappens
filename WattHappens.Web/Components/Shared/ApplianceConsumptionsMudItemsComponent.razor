@@ -1,0 +1,68 @@
+@using WattHappens.Domain.Entities
+@using WattHappens.Web.Utilities
+
+<MudItem xs="3">
+    <MudCard Style="padding: 4px;">
+        <MudText Typo="Typo.caption">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                     Style="vertical-align: middle;"/>
+            <span style="color: slategrey;">Daily</span>
+        </MudText>
+        <MudText Align="Align.Center">
+            <MudText>
+                @(Calculations.KilowattConsumptionPerDay(Appliance))
+                <span style="font-size: 0.8rem; color: slategrey;">kWh</span>
+            </MudText>
+            <MudText>
+                @(Calculations.CostPerDay(Appliance, Price))
+                <span style="font-size: 0.8rem; color: slategrey;">€</span>
+            </MudText>
+        </MudText>
+    </MudCard>
+</MudItem>
+
+<MudItem xs="3">
+    <MudCard Style="padding: 4px;">
+        <MudText Typo="Typo.caption">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                     Style="vertical-align: middle;"/>
+            <span style="color: slategrey;">Monthly</span>
+        </MudText>
+        <MudText Align="Align.Center">
+            <MudText>
+                @(Calculations.KilowattConsumptionPerMonth(Appliance))
+                <span style="font-size: 0.8rem; color: slategrey;">kWh</span>
+            </MudText>
+            <MudText>
+                @(Calculations.CostPerMonth(Appliance, Price))
+                <span style="font-size: 0.8rem; color: slategrey;">€</span>
+            </MudText>
+        </MudText>
+    </MudCard>
+</MudItem>
+
+<MudItem xs="3">
+    <MudCard Style="padding: 4px;">
+        <MudText Typo="Typo.caption">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                     Style="vertical-align: middle;"/>
+            <span style="color: slategrey;">Yearly</span>
+        </MudText>
+        <MudText Align="Align.Center">
+            <MudText>
+                @(Calculations.KilowattConsumptionPerYear(Appliance))
+                <span style="font-size: 0.8rem; color: slategrey;">kWh</span>
+            </MudText>
+            <MudText>
+                @(Calculations.CostPerYear(Appliance, Price))
+                <span style="font-size: 0.8rem; color: slategrey;">€</span>
+            </MudText>
+        </MudText>
+    </MudCard>
+</MudItem>
+
+@code 
+{
+    [Parameter] public Appliance Appliance { get; set; } = default!;
+    [Parameter] public Price Price { get; set; } = default!;
+}

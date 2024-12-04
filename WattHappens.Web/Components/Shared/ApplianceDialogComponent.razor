@@ -26,6 +26,27 @@
 
             <MudFlexBreak/>
 
+            <MudItem xs="6">
+                <MudSelect @bind-Value="_isWatts"
+                           Label="Unit"
+                           Variant="Variant.Text">
+                    <MudSelectItem Value="true">Watt (W)</MudSelectItem>
+                    <MudSelectItem Value="false">Kilo Watt (kW)</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudNumericField @bind-Value="PowerConsumption"
+                                 Label="Power Consumption"
+                                 Variant="Variant.Text"
+                                 Min="0"
+                                 Max="999999999"
+                                 Adornment="Adornment.End"
+                                 AdornmentText="@(_isWatts ? "W" : "kW")"/>
+            </MudItem>
+
+            <MudFlexBreak/>
+            
             <MudItem xs="4">
                 <MudNumericField @bind-Value="_appliance.Quantity"
                                  Label="Quantity"
@@ -57,28 +78,7 @@
             </MudItem>
 
             <MudFlexBreak/>
-
-            <MudItem xs="6">
-                <MudSelect @bind-Value="_isWatts"
-                           Label="Unit"
-                           Variant="Variant.Text">
-                    <MudSelectItem Value="true">Watt (W)</MudSelectItem>
-                    <MudSelectItem Value="false">Kilo Watt (kW)</MudSelectItem>
-                </MudSelect>
-            </MudItem>
-
-            <MudItem xs="6">
-                <MudNumericField @bind-Value="PowerConsumption"
-                                 Label="Power Consumption"
-                                 Variant="Variant.Text"
-                                 Min="0"
-                                 Max="999999999"
-                                 Adornment="Adornment.End"
-                                 AdornmentText="@(_isWatts ? "W" : "kW")"/>
-            </MudItem>
-
-            <MudFlexBreak/>
-
+            
             <MudItem xs="6">
                 <MudText>
                     <MudInputLabel>Usage per Day</MudInputLabel>

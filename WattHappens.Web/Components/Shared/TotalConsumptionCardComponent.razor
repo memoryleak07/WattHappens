@@ -1,0 +1,60 @@
+@using WattHappens.Domain.Entities
+
+<MudCard Style="background-color: #CFD8DC">
+    <MudCardHeader>
+        <MudText Typo="Typo.caption">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Insights"
+                     Style="vertical-align: middle;"/>
+            <span style="color: slategrey;">Total Consumption</span>
+        </MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        
+        <MudStack Row="true" Spacing="10" Justify="Justify.SpaceBetween" Wrap="Wrap.Wrap">
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Total Load</MudText>
+                <MudText Typo="Typo.body2">4.5 kW</MudText>
+            </MudItem>
+            
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Total Appliances</MudText>
+                <MudText Typo="Typo.body2">6</MudText>
+            </MudItem>
+
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Total €</MudText>
+                <MudText Typo="Typo.body2">126.3 €</MudText>
+            </MudItem>
+            
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Per Day</MudText>
+                <MudText Typo="Typo.body2">4.5 kW</MudText>
+            </MudItem>
+
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Per Month</MudText>
+                <MudText Typo="Typo.body2">4.5 kW</MudText>
+            </MudItem>
+
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Per Year</MudText>
+                <MudText Typo="Typo.body2">4.5 kW</MudText>
+            </MudItem>
+        </MudStack>
+        
+    </MudCardContent>
+    
+</MudCard>
+
+@code 
+
+
+
+
+
+
+
+{
+    [Parameter] public ICollection<Appliance> Appliances { get; set; } = default!;
+    [Parameter] public Price Price { get; set; } = default!;
+}

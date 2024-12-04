@@ -54,12 +54,12 @@ public class ApplicationDbContextInitializer(
 
         var appliances = new List<Appliance>
         {
-            new() { Name = "Refrigerator", Category = EnCategory.KitchenAppliances, Quantity = 1, WattPowerConsumption = 150, HoursUsedPerDay = 24, DaysUsedPerMonth = 30 },
-            new() { Name = "Electric Oven", Category = EnCategory.KitchenAppliances, Quantity = 1, WattPowerConsumption = 2000, HoursUsedPerDay = 20/60.0, DaysUsedPerMonth = 30 },
-            // new() { Name = "Microwave", Category = EnCategory.KitchenAppliances, Quantity = 1, WattPowerConsumption = 1000, HoursUsedPerDay = 0.5, DaysUsedPerMonth = 30 },
-            // new() { Name = "Washer", Category = EnCategory.LaundryAppliances, Quantity = 1, WattPowerConsumption = 500, HoursUsedPerDay = 1, DaysUsedPerMonth = 30 },
-            // new() { Name = "Dryer", Category = EnCategory.LaundryAppliances, Quantity = 1, WattPowerConsumption = 5000, HoursUsedPerDay = 1, DaysUsedPerMonth = 30 },
-            // new() { Name = "Air Conditioner", Category = EnCategory.ClimateControl, Quantity = 1, WattPowerConsumption = 1500, HoursUsedPerDay = 8, DaysUsedPerMonth = 30 },
+            new() { Name = "Refrigerator", Category = EnCategory.KitchenAppliances, Quantity = 1, WattPowerConsumption = 150, HoursUsedPerDay = 5, DaysUsedPerWeek = 3, DaysUsedPerMonth = 12 },
+            new() { Name = "Electric Oven", Category = EnCategory.KitchenAppliances, Quantity = 1, WattPowerConsumption = 2000, HoursUsedPerDay = 20/60.0, DaysUsedPerWeek = 4, DaysUsedPerMonth = 24 },
+            new() { Name = "Microwave", Category = EnCategory.KitchenAppliances, Quantity = 1, WattPowerConsumption = 1000, HoursUsedPerDay = 0.5, DaysUsedPerWeek = 6, DaysUsedPerMonth = 9 },
+            new() { Name = "Washer", Category = EnCategory.LaundryAppliances, Quantity = 1, WattPowerConsumption = 500, HoursUsedPerDay = 1, DaysUsedPerWeek = 1, DaysUsedPerMonth = 11 },
+            new() { Name = "Dryer", Category = EnCategory.LaundryAppliances, Quantity = 1, WattPowerConsumption = 5000, HoursUsedPerDay = 5.4, DaysUsedPerWeek = 5, DaysUsedPerMonth = 16 },
+            new() { Name = "Air Conditioner", Category = EnCategory.ClimateControl, Quantity = 1, WattPowerConsumption = 1500, HoursUsedPerDay = 8, DaysUsedPerWeek = 2, DaysUsedPerMonth = 5 },
             // new() { Name = "Heating", Category = EnCategory.ClimateControl, Quantity = 1, WattPowerConsumption = 2000, HoursUsedPerDay = 8, DaysUsedPerMonth = 30 },
             // new() { Name = "TV", Category = EnCategory.Entertainment, Quantity = 1, WattPowerConsumption = 100, HoursUsedPerDay = 4, DaysUsedPerMonth = 30 },
             // new() { Name = "Gaming Console", Category = EnCategory.Entertainment, Quantity = 1, WattPowerConsumption = 150, HoursUsedPerDay = 4, DaysUsedPerMonth = 30 },
