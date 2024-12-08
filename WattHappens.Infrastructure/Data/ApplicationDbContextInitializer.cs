@@ -28,11 +28,12 @@ public class ApplicationDbContextInitializer(
         }
     }
 
-    public async Task SeedDataAsync()
+    private async Task SeedDataAsync()
     {
         var price = new Price
         {
-            Cost = 0.30
+            ElectricityCost = 0.30,
+            Precision = 2
         };
         
         var categories = new List<Category>
@@ -83,7 +84,7 @@ public class ApplicationDbContextInitializer(
             // new() { Name = "Other Device", Category = EnCategory.Others, Quantity = 1, WattPowerConsumption = 100, HoursUsedPerDay = 1, DaysUsedPerMonth = 30 }
         };
         
-        await context.Price.AddAsync(price);
+        await context.Prices.AddAsync(price);
         await context.Categories.AddRangeAsync(categories);
         await context.Appliances.AddRangeAsync(appliances);
         await context.SaveChangesAsync();

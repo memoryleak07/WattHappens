@@ -8,7 +8,7 @@ public class PriceConfiguration : IEntityTypeConfiguration<Price>
     {
         builder.HasKey(e => e.Id);
         
-        builder.Property(e => e.Cost)
+        builder.Property(e => e.ElectricityCost)
             .IsRequired();
     }
 }

@@ -6,8 +6,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Category> Categories { get; init; }
     public DbSet<Appliance> Appliances { get; init; }
-    
-    public DbSet<Price> Price { get; init; }
+    public DbSet<Price> Prices { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

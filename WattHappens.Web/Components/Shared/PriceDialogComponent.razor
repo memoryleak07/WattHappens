@@ -1,0 +1,65 @@
+﻿@using System.Globalization
+@using WattHappens.Application.Constants
+@using WattHappens.Domain.Entities
+
+<MudDialog>
+    <DialogContent>
+        <MudGrid Spacing="10">
+
+            <MudItem xs="12">
+                <MudNumericField @bind-value="_price.ElectricityCost"
+                                 Label="Electricity Energy Cost"
+                                 Adornment="Adornment.End"
+                                 AdornmentText="€/kWh"
+                                 AdornmentColor="Color.Default"
+                                 Format="F2"
+                                 Step=".2d"
+                                 Culture="CultureInfo.CurrentCulture"
+                                 Required="true"
+                                 Variant="Variant.Outlined"
+                                 HelperText="Euro / Kilowatt-hour (€/kWh)"/>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudNumericField @bind-value="_price.Precision"
+                                 Label="Decimal Precision"
+                                 Adornment="Adornment.End"
+                                 AdornmentText="integer"
+                                 AdornmentColor="Color.Default"
+                                 Step="1"
+                                 Culture="CultureInfo.CurrentCulture"
+                                 Required="true"
+                                 Variant="Variant.Outlined"
+                                 HelperText="Number of decimal places to round to"/>
+            </MudItem>
+            
+        </MudGrid>
+        
+    </DialogContent>
+    <DialogActions>
+        <MudButton Style="padding: 20px; margin: 5px" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Primary" Disabled="DisableSubmit" OnClick="Submit">
+            Update
+        </MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+@code 
+{
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public Price Price { get; set; } = default!;
+    
+    private Price _price = default!;
+
+    private bool DisableSubmit =>
+        _price.ElectricityCost <= 0 || _price.Precision <= 0;
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(Price));
+    private void Cancel() => MudDialog.Cancel();
+    
+    protected override void OnInitialized()
+    {
+        _price = Price;
+    }
+}

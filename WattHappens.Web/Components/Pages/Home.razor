@@ -15,20 +15,36 @@
 <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
 <MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 8 Template!</MudText>
 
-@if (!_appliances.Any())
-{
-    <MudText Typo="Typo.h6">No appliances found.</MudText>
-}
-else
-{
-    <MudStack>
-        
-        <TotalConsumptionCardComponent Appliances="_appliances" Price="_price"/>
+<MudStack>
+    
 
+    <MudItem xl="6" xs="12">
+        <MudButton @onclick="AddPriceAsync"
+                   Size="Size.Large"
+                   Color="Color.Tertiary"
+                   StartIcon="@Icons.Material.Filled.Settings">
+            Edit Price
+        </MudButton>
+    </MudItem>
+    
+    <MudItem xl="6" xs="12">
         <MudButton @onclick="AddApplianceAsync"
                    Size="Size.Large"
                    Color="Color.Tertiary"
-                   StartIcon="@Icons.Material.Filled.Add"/>
+                   StartIcon="@Icons.Material.Filled.Add">
+            Add Appliance
+        </MudButton>
+    </MudItem>
+
+    @if (!_appliances.Any())
+    {
+        <MudText Typo="Typo.h6">No appliances found.</MudText>
+    }
+    else
+    {
+        <TotalConsumptionCardComponent
+            Appliances="_appliances"
+            Price="_price"/>
 
         <MudGrid Spacing="10" Justify="Justify.Center">
             @foreach (var appliance in _appliances)
@@ -86,32 +102,17 @@ else
                 </MudItem>
             }
         </MudGrid>
-
-
-    </MudStack>
-}
+    }
+</MudStack>
 
 @code
-
-
-
-
-
-
-
 {
     private ICollection<Appliance> _appliances = new List<Appliance>();
     private Price? _price = null;
 
     protected override async Task OnInitializedAsync()
     {
-        _price = await DbContext.Price.FirstOrDefaultAsync();
-        if (_price == null)
-        {
-            NavigationManager.NavigateTo("/settings");
-            return;
-        }
-
+        _price = await DbContext.Prices.FirstOrDefaultAsync();
         _appliances = await DbContext.Appliances.ToListAsync();
     }
 
@@ -122,6 +123,35 @@ else
             DbContext.Appliances.Remove(appliance);
             await DbContext.SaveChangesAsync();
             _appliances.Remove(appliance);
+            Snackbar.Add("Success!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"{ex.Message}. {ex.InnerException?.Message}", Severity.Error);
+        }
+    }
+
+    private async Task AddPriceAsync()
+    {
+        var dialog = await DialogService.ShowAsync<PriceDialogComponent>(
+            "Edit Price",
+            new DialogParameters { ["Price"] = _price },
+            new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
+
+        var result = await dialog.Result;
+        if (result == null || result.Canceled) return;
+
+        var updatedPrice = (Price?)result.Data;
+        if (updatedPrice == null)
+        {
+            Snackbar.Add("Error mapping item.", Severity.Error);
+            return;
+        }
+
+        try
+        {
+            DbContext.Prices.Update(updatedPrice);
+            await DbContext.SaveChangesAsync();
             Snackbar.Add("Success!", Severity.Success);
         }
         catch (Exception ex)
