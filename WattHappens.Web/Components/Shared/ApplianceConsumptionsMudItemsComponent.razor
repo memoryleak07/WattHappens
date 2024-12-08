@@ -26,6 +26,26 @@
         <MudText Typo="Typo.caption">
             <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
                      Style="vertical-align: middle;"/>
+            <span style="color: slategrey;">Weekly</span>
+        </MudText>
+        <MudText Align="Align.Center">
+            <MudText>
+                @(Calculations.KilowattConsumptionPerWeek(Appliance))
+                <span style="font-size: 0.8rem; color: slategrey;">kWh</span>
+            </MudText>
+            <MudText>
+                @(Calculations.CostPerWeek(Appliance, Price))
+                <span style="font-size: 0.8rem; color: slategrey;">€</span>
+            </MudText>
+        </MudText>
+    </MudCard>
+</MudItem>
+
+<MudItem xs="3">
+    <MudCard Style="padding: 4px;">
+        <MudText Typo="Typo.caption">
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                     Style="vertical-align: middle;"/>
             <span style="color: slategrey;">Monthly</span>
         </MudText>
         <MudText Align="Align.Center">

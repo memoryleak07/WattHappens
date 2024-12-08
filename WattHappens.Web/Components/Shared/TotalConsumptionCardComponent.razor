@@ -1,4 +1,5 @@
 @using WattHappens.Domain.Entities
+@using WattHappens.Web.Utilities
 
 <MudCard Style="background-color: #CFD8DC">
     <MudCardHeader>
@@ -9,45 +10,128 @@
         </MudText>
     </MudCardHeader>
     <MudCardContent>
-        
-        <MudStack Row="true" Spacing="10" Justify="Justify.SpaceBetween" Wrap="Wrap.Wrap">
-            <MudItem xs="3">
+
+        <MudGrid>
+
+            <MudItem xs="6">
                 <MudText Typo="Typo.caption">Total Load</MudText>
-                <MudText Typo="Typo.body2">4.5 kW</MudText>
+                <MudText Typo="Typo.body2">@_consumptionDto.TotalLoad
+                    <span style="font-size: 0.8rem; color: slategrey;">W</span>
+                </MudText>
+
             </MudItem>
-            
-            <MudItem xs="3">
+
+            <MudItem xs="6">
                 <MudText Typo="Typo.caption">Total Appliances</MudText>
-                <MudText Typo="Typo.body2">6</MudText>
+                <MudText Typo="Typo.body2">@_consumptionDto.TotalAppliances</MudText>
+            </MudItem>
+
+            <MudFlexBreak/>
+
+            <MudItem xs="3">
+                <MudText Typo="Typo.caption">Per Day</MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerDay.kWh
+                    <span style="font-size: 0.8rem; color: slategrey;">kW</span>
+                </MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerDay.cost
+                    <span style="font-size: 0.8rem; color: slategrey;">€</span>
+                </MudText>
+
             </MudItem>
 
             <MudItem xs="3">
-                <MudText Typo="Typo.caption">Total €</MudText>
-                <MudText Typo="Typo.body2">126.3 €</MudText>
-            </MudItem>
-            
-            <MudItem xs="3">
-                <MudText Typo="Typo.caption">Per Day</MudText>
-                <MudText Typo="Typo.body2">4.5 kW</MudText>
+                <MudText Typo="Typo.caption">Per Week</MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerWeek.kWh
+                    <span style="font-size: 0.8rem; color: slategrey;">kW</span>
+                </MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerWeek.cost
+                    <span style="font-size: 0.8rem; color: slategrey;">€</span>
+                </MudText>
             </MudItem>
 
             <MudItem xs="3">
                 <MudText Typo="Typo.caption">Per Month</MudText>
-                <MudText Typo="Typo.body2">4.5 kW</MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerMonth.kWh
+                    <span style="font-size: 0.8rem; color: slategrey;">kW</span>
+                </MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerMonth.cost
+                    <span style="font-size: 0.8rem; color: slategrey;">€</span>
+                </MudText>
             </MudItem>
 
             <MudItem xs="3">
                 <MudText Typo="Typo.caption">Per Year</MudText>
-                <MudText Typo="Typo.body2">4.5 kW</MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerYear.kWh
+                    <span style="font-size: 0.8rem; color: slategrey;">kW</span>
+                </MudText>
+                <MudText Typo="Typo.body2">
+                    @_consumptionDto.PerYear.cost
+                    <span style="font-size: 0.8rem; color: slategrey;">€</span>
+                </MudText>
             </MudItem>
-        </MudStack>
-        
+
+        </MudGrid>
+
     </MudCardContent>
-    
+
 </MudCard>
 
 @code 
 {
     [Parameter] public ICollection<Appliance> Appliances { get; set; } = default!;
     [Parameter] public Price Price { get; set; } = default!;
+
+    private ConsumptionDto _consumptionDto = new();
+
+    private class ConsumptionDto
+    {
+        public double TotalLoad { get; private init; }
+        public int TotalAppliances { get; set; }
+        public (double kWh, double cost) PerDay { get; set; }
+        public (double kWh, double cost) PerWeek { get; set; }
+        public (double kWh, double cost) PerMonth { get; set; }
+        public (double kWh, double cost) PerYear { get; set; }
+
+        public static ConsumptionDto ToConsumptionDto(ICollection<Appliance> appliances, Price price)
+        {
+            // ReSharper disable ConvertClosureToMethodGroup
+            return new ConsumptionDto
+            {
+                TotalLoad = appliances.Sum(a => a.WattPowerConsumption),
+                TotalAppliances = appliances.Sum(a => a.Quantity),
+                PerDay =
+                (
+                    Math.Round(appliances.Sum(a => Calculations.KilowattConsumptionPerDay(a)), price.WattPrecision),
+                    Math.Round(appliances.Sum(a => Calculations.CostPerDay(a, price)), price.CostPrecision)
+                ),
+                PerWeek =
+                (
+                    Math.Round(appliances.Sum(a => Calculations.KilowattConsumptionPerWeek(a)), price.WattPrecision),
+                    Math.Round(appliances.Sum(a => Calculations.CostPerWeek(a, price)), price.CostPrecision)
+                 ),
+                PerMonth =
+                (
+                    Math.Round(appliances.Sum(a => Calculations.KilowattConsumptionPerMonth(a)), price.WattPrecision),
+                    Math.Round(appliances.Sum(a => Calculations.CostPerMonth(a, price)), price.CostPrecision)
+                ),
+                PerYear =
+                (
+                    Math.Round(appliances.Sum(a => Calculations.KilowattConsumptionPerYear(a)), price.WattPrecision),
+                    Math.Round(appliances.Sum(a => Calculations.CostPerYear(a, price)), price.CostPrecision)
+                ),
+            };
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _consumptionDto = ConsumptionDto.ToConsumptionDto(Appliances, Price);
+    }
 }

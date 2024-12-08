@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using WattHappens.Application.Constants
 @using WattHappens.Domain.Entities
 
 <MudDialog>
@@ -13,32 +12,48 @@
                                  AdornmentText="€/kWh"
                                  AdornmentColor="Color.Default"
                                  Format="F2"
-                                 Step=".2d"
+                                 Step=".01"
                                  Culture="CultureInfo.CurrentCulture"
                                  Required="true"
                                  Variant="Variant.Outlined"
                                  HelperText="Euro / Kilowatt-hour (€/kWh)"/>
             </MudItem>
 
-            <MudItem xs="12">
-                <MudNumericField @bind-value="_price.Precision"
-                                 Label="Decimal Precision"
+            <MudItem xs="6">
+                <MudNumericField @bind-value="_price.CostPrecision"
+                                 Label="Cost Decimal Precision"
                                  Adornment="Adornment.End"
                                  AdornmentText="integer"
                                  AdornmentColor="Color.Default"
                                  Step="1"
+                                 Min="0"
+                                 Max="5"
                                  Culture="CultureInfo.CurrentCulture"
                                  Required="true"
                                  Variant="Variant.Outlined"
                                  HelperText="Number of decimal places to round to"/>
             </MudItem>
-            
+
+            <MudItem xs="6">
+                <MudNumericField @bind-value="_price.WattPrecision"
+                                 Label="Watt Decimal Precision"
+                                 Adornment="Adornment.End"
+                                 AdornmentText="integer"
+                                 AdornmentColor="Color.Default"
+                                 Step="1"
+                                 Min="0"
+                                 Max="5"
+                                 Culture="CultureInfo.CurrentCulture"
+                                 Required="true"
+                                 Variant="Variant.Outlined"
+                                 HelperText="Number of decimal places to round to"/>
+            </MudItem>
         </MudGrid>
         
     </DialogContent>
     <DialogActions>
         <MudButton Style="padding: 20px; margin: 5px" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Primary" Disabled="DisableSubmit" OnClick="Submit">
+        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Tertiary" Disabled="DisableSubmit" OnClick="Submit">
             Update
         </MudButton>
     </DialogActions>
@@ -52,9 +67,12 @@
     
     private Price _price = default!;
 
-    private bool DisableSubmit =>
-        _price.ElectricityCost <= 0 || _price.Precision <= 0;
-
+    private bool DisableSubmit => _price.ElectricityCost <= 0 
+                                  || _price.CostPrecision <= 0 
+                                  || _price.CostPrecision > 5
+                                  || _price.WattPrecision <= 0 
+                                  || _price.WattPrecision > 5;
+    
     private void Submit() => MudDialog.Close(DialogResult.Ok(Price));
     private void Cancel() => MudDialog.Cancel();
     

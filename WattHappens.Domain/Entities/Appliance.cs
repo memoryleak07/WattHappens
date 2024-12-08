@@ -15,4 +15,5 @@ public class Appliance
     public double HoursUsedPerDay { get; set; } // Usage per day in hours
     public double DaysUsedPerWeek { get; set; } = 7; // Usage per week in days
     public double DaysUsedPerMonth { get; set; } = 30; // Usage per month in days
+    public int MonthsUsedPerYear { get; set; } = 12; // Usage per year in months
 }

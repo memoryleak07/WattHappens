@@ -3,22 +3,17 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject ApplicationDbContext DbContext
-@inject NavigationManager NavigationManager
 @using Microsoft.EntityFrameworkCore
+@using WattHappens.Application.Constants
 @using WattHappens.Domain.Entities
 @using WattHappens.Infrastructure.Data
 @using WattHappens.Web.Components.Shared
-@using WattHappens.Web.Utilities
 
 <PageTitle>Home</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 8 Template!</MudText>
-
 <MudStack>
-    
 
-    <MudItem xl="6" xs="12">
+    <MudItem xl="6" xs="6">
         <MudButton @onclick="AddPriceAsync"
                    Size="Size.Large"
                    Color="Color.Tertiary"
@@ -27,7 +22,7 @@
         </MudButton>
     </MudItem>
     
-    <MudItem xl="6" xs="12">
+    <MudItem xl="6" xs="6">
         <MudButton @onclick="AddApplianceAsync"
                    Size="Size.Large"
                    Color="Color.Tertiary"
@@ -53,10 +48,9 @@
                     <MudCard Outlined="true" Elevation="5">
                         <MudCardHeader>
                             <CardHeaderContent>
-                                <MudText Typo="Typo.h6">@appliance.Name</MudText>
-                            </CardHeaderContent>
-                            <CardHeaderAvatar>
+                                <MudText Typo="Typo.h6" Style="margin: 5px; padding: 5px">@appliance.Name</MudText>
                                 <MudChip T="string"
+                                         Size="Size.Small"
                                          Icon="@Icons.Material.Outlined.Power"
                                          Color="Color.Transparent">
                                     @($"{appliance.WattPowerConsumption} W")
@@ -64,12 +58,19 @@
                                 @if (appliance.Quantity > 1)
                                 {
                                     <MudChip T="string"
+                                             Size="Size.Small"
                                              Icon="@Icons.Material.Outlined.Numbers"
                                              Color="Color.Transparent">
                                         @($"x{appliance.Quantity}")
                                     </MudChip>
                                 }
-                            </CardHeaderAvatar>
+                                <MudChip T="EnCategory"
+                                         Size="Size.Small"
+                                         Icon="@Icons.Material.Outlined.Category"
+                                         Color="Color.Transparent">
+                                    @appliance.Category
+                                </MudChip>
+                            </CardHeaderContent>
                             <CardHeaderActions>
                                 <MudIconButton OnClick="@(async () => await EditApplianceAsync(@appliance))"
                                                Icon="@Icons.Material.Filled.Edit"
@@ -82,6 +83,7 @@
                             </CardHeaderActions>
                         </MudCardHeader>
                         <MudCardContent>
+
                             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
                                 <ApplianceMudChartsDonutComponent Appliance="appliance"/>
                             </MudStack>
@@ -90,7 +92,7 @@
                         <MudDivider/>
                         <MudCardContent Class="pa-4" Style="background-color:#CFD8DC">
                             <MudStack Row="true"
-                                      Spacing="10"
+                                      Spacing="2"
                                       AlignItems="AlignItems.Center"
                                       Justify="Justify.SpaceAround">
 
@@ -107,12 +109,14 @@
 
 @code
 {
+    private ICollection<Category> _categories = new List<Category>();
     private ICollection<Appliance> _appliances = new List<Appliance>();
-    private Price? _price = null;
+    private Price _price = default!;
 
     protected override async Task OnInitializedAsync()
     {
-        _price = await DbContext.Prices.FirstOrDefaultAsync();
+        _price = await DbContext.Prices.FirstAsync();
+        _categories = await DbContext.Categories.ToListAsync();
         _appliances = await DbContext.Appliances.ToListAsync();
     }
 
@@ -123,7 +127,6 @@
             DbContext.Appliances.Remove(appliance);
             await DbContext.SaveChangesAsync();
             _appliances.Remove(appliance);
-            Snackbar.Add("Success!", Severity.Success);
         }
         catch (Exception ex)
         {
@@ -152,7 +155,6 @@
         {
             DbContext.Prices.Update(updatedPrice);
             await DbContext.SaveChangesAsync();
-            Snackbar.Add("Success!", Severity.Success);
         }
         catch (Exception ex)
         {
@@ -164,7 +166,7 @@
     {
         var dialog = await DialogService.ShowAsync<ApplianceDialogComponent>(
             "Add Appliance",
-            new DialogParameters { ["Appliance"] = new Appliance(), ["IsEditMode"] = false },
+            new DialogParameters { ["Appliance"] = new Appliance(), ["Categories"] = _categories, ["IsEditMode"] = false },
             new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
 
         var result = await dialog.Result;
@@ -182,7 +184,6 @@
             await DbContext.Appliances.AddAsync(newAppliance);
             await DbContext.SaveChangesAsync();
             _appliances.Add(newAppliance);
-            Snackbar.Add("Success!", Severity.Success);
         }
         catch (Exception ex)
         {
@@ -194,7 +195,7 @@
     {
         var dialog = await DialogService.ShowAsync<ApplianceDialogComponent>(
             "Edit Appliance",
-            new DialogParameters { ["Appliance"] = appliance, ["IsEditMode"] = true },
+            new DialogParameters { ["Appliance"] = appliance, ["Categories"] = _categories, ["IsEditMode"] = true },
             new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
 
         var result = await dialog.Result;
@@ -211,7 +212,6 @@
         {
             DbContext.Appliances.Update(updatedAppliance);
             await DbContext.SaveChangesAsync();
-            Snackbar.Add("Success!", Severity.Success);
         }
         catch (Exception ex)
         {

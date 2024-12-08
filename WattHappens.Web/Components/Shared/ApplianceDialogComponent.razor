@@ -8,10 +8,19 @@
 
             <MudItem xs="12">
                 <MudSelect @bind-Value="_appliance.Category"
-                           Label="Category">
-                    @foreach (var category in Enum.GetValues<EnCategory>())
+                           AdornmentColor="Color.Tertiary"
+                           HelperText="Category"
+                           Clearable="true"
+                           Dense="true">
+                    @foreach (var category in Categories)
                     {
-                        <MudSelectItem Value="@(category)">@category.ToString()</MudSelectItem>
+                        <MudSelectItem
+                            Value="@(category.Id)">
+                            @* <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" height="14" class="mr-1" /> *@
+                            @* <MudIcon Icon="@Icons.Material.Filled.Circle" Color="Color.Error" Size="Size.Small" Class="mr-1" /> *@
+                            @category.Name
+                            <text style="font-size: 0.7rem">@category.Description</text>
+                        </MudSelectItem>
                     }
                 </MudSelect>
             </MudItem>
@@ -20,7 +29,8 @@
 
             <MudItem xs="12">
                 <MudTextField @bind-Value="_appliance.Name"
-                              Label="Name"
+                              HelperText="Name of the appliance"
+                              AdornmentColor="Color.Tertiary"
                               Variant="Variant.Text"/>
             </MudItem>
 
@@ -28,7 +38,8 @@
 
             <MudItem xs="6">
                 <MudSelect @bind-Value="_isWatts"
-                           Label="Unit"
+                           AdornmentColor="Color.Tertiary"
+                           HelperText="Unit"
                            Variant="Variant.Text">
                     <MudSelectItem Value="true">Watt (W)</MudSelectItem>
                     <MudSelectItem Value="false">Kilo Watt (kW)</MudSelectItem>
@@ -37,8 +48,9 @@
 
             <MudItem xs="6">
                 <MudNumericField @bind-Value="PowerConsumption"
-                                 Label="Power Consumption"
+                                 HelperText="Consumption"
                                  Variant="Variant.Text"
+                                 AdornmentColor="Color.Tertiary"
                                  Min="0"
                                  Max="999999999"
                                  Adornment="Adornment.End"
@@ -49,8 +61,9 @@
             
             <MudItem xs="4">
                 <MudNumericField @bind-Value="_appliance.Quantity"
-                                 Label="Quantity"
+                                 HelperText="Quantity"
                                  Variant="Variant.Text"
+                                 AdornmentColor="Color.Tertiary"
                                  Min="1"
                                  Max="99999999"
                                  Adornment="Adornment.End"
@@ -59,8 +72,9 @@
 
             <MudItem xs="4">
                 <MudNumericField @bind-Value="_appliance.Efficiency"
-                                 Label="Efficiency"
+                                 HelperText="Efficiency in %"
                                  Variant="Variant.Text"
+                                 AdornmentColor="Color.Tertiary"
                                  Min="1"
                                  Max="100"
                                  Adornment="Adornment.End"
@@ -69,7 +83,8 @@
 
             <MudItem xs="4">
                 <MudSelect @bind-Value="_appliance.ClassEnergy"
-                           Label="Class">
+                           AdornmentColor="Color.Tertiary"
+                           HelperText="Energy efficiency class">
                     @foreach (var energyClass in Enum.GetValues<EnEnergyClass>())
                     {
                         <MudSelectItem Value="@(energyClass)">@energyClass.ToString()</MudSelectItem>
@@ -81,7 +96,10 @@
             
             <MudItem xs="6">
                 <MudText>
-                    <MudInputLabel>Usage per Day</MudInputLabel>
+                    <MudInputLabel Style="font-size: small">Usage per Day</MudInputLabel>
+                    <MudIcon
+                        Color="Color.Tertiary"
+                        Icon="@Icons.Material.Filled.Alarm"></MudIcon>
                 </MudText>
             </MudItem>
 
@@ -90,7 +108,7 @@
                     <MudSwitch @bind-Value="_isHours"
                                Size="Size.Small"
                                Label="@(_isHours ? "Hours" : "Minutes")"
-                               LabelPosition="LabelPosition.End"/>
+                               LabelPosition="LabelPosition.Start"/>
                 </MudText>
             </MudItem>
 
@@ -100,6 +118,8 @@
                            Max="@(_isHours ? 24 : 60)"
                            Step="@(_isHours ? 0.5 : 5)"
                            ValueLabel="true"
+                           Size="Size.Small"
+                           Color="Color.Tertiary"
                            Culture="@CultureInfo.CurrentCulture"
                            ValueLabelFormat="@(_isHours ? "0.# hr" : "0 min")"
                            TickMarks="true"
@@ -108,35 +128,50 @@
 
             <MudFlexBreak/>
 
-            <MudItem xs="6">
+            <MudItem xs="4">
                 <MudNumericField @bind-Value="_appliance.DaysUsedPerWeek"
-                                 Label="Usage per Week"
+                                 HelperText="Days used per week"
                                  Variant="Variant.Text"
                                  Min="0"
                                  Max="7"
                                  Step="1"
                                  Adornment="Adornment.End"
+                                 AdornmentColor="Color.Tertiary"
                                  IconSize="Size.Small"
                                  AdornmentIcon="@Icons.Material.Filled.CalendarToday"/>
             </MudItem>
 
-            <MudItem xs="6">
+            <MudItem xs="4">
                 <MudNumericField @bind-Value="_appliance.DaysUsedPerMonth"
-                                 Label="Usage per Month"
+                                 HelperText="Days used per month"
                                  Variant="Variant.Text"
                                  Min="0"
                                  Max="30"
                                  Step="1"
                                  Adornment="Adornment.End"
+                                 AdornmentColor="Color.Tertiary"
                                  IconSize="Size.Small"
                                  AdornmentIcon="@Icons.Material.Filled.CalendarMonth"/>
+            </MudItem>
+
+            <MudItem xs="4">
+                <MudNumericField @bind-Value="_appliance.MonthsUsedPerYear"
+                                 HelperText="Months used per year"
+                                 Variant="Variant.Text"
+                                 Min="0"
+                                 Max="12"
+                                 Step="1"
+                                 Adornment="Adornment.End"
+                                 AdornmentColor="Color.Tertiary"
+                                 IconSize="Size.Small"
+                                 AdornmentIcon="@Icons.Material.Filled.CalendarViewMonth"/>
             </MudItem>
         </MudGrid>
         
     </DialogContent>
     <DialogActions>
         <MudButton Style="padding: 20px; margin: 5px" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Primary" Disabled="DisableSubmit" OnClick="Submit">@(IsEditMode ? "Update" : "Save")</MudButton>
+        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Tertiary" Disabled="DisableSubmit" OnClick="Submit">@(IsEditMode ? "Update" : "Save")</MudButton>
     </DialogActions>
 
 </MudDialog>
@@ -145,11 +180,13 @@
 {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; } = default!;
     [Parameter] public Appliance Appliance { get; set; } = default!;
+    [Parameter] public List<Category> Categories { get; set; } = [];
     [Parameter] public bool IsEditMode { get; set; }
     
     private bool _isHours = false;
     private bool _isWatts = false;
     private Appliance _appliance = default!;
+
     private readonly string[] _tickMarksMinutes = Enumerable.Range(0, (60 / 5) + 1)
             .Select(i =>
             {
@@ -185,7 +222,10 @@
         || _appliance.Efficiency < 0
         || _appliance.Efficiency > 100
         || _appliance.WattPowerConsumption <= 0
-        || _appliance.HoursUsedPerDay <= 0.0001;
+        || _appliance.HoursUsedPerDay <= 0.0001
+        || _appliance.DaysUsedPerWeek > 7
+        || _appliance.DaysUsedPerMonth > 30
+        || _appliance.MonthsUsedPerYear > 12;
 
     private void Submit() => MudDialog.Close(DialogResult.Ok(Appliance));
     private void Cancel() => MudDialog.Cancel();
@@ -193,5 +233,7 @@
     protected override void OnInitialized()
     {
         _appliance = Appliance;
+        _isWatts = _appliance.WattPowerConsumption < 1000;
+        _isHours = _appliance.HoursUsedPerDay >= 1;
     }
 }
