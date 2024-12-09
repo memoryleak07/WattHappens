@@ -1,46 +1,45 @@
 ﻿@page "/"
+@using WattHappens.Web.Components.Shared
 
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavigationManager
-@using Microsoft.EntityFrameworkCore
-@using WattHappens.Application.Constants
-@using WattHappens.Domain.Entities
-@using WattHappens.Infrastructure.Data
-@using WattHappens.Web.Components.Shared
 
 <PageTitle>Home</PageTitle>
 
 <MudStack>
 
-    <MudItem xl="6" xs="6">
-        <MudButton @onclick="AddPriceAsync"
-                   Size="Size.Large"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Settings">
-            Edit Price
-        </MudButton>
-    </MudItem>
-    
-    <MudItem xl="6" xs="6">
-        <MudButton @onclick="AddApplianceAsync"
-                   Size="Size.Large"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Add">
-            Add Appliance
-        </MudButton>
-    </MudItem>
+    <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
 
-    <MudItem xl="6" xs="6">
-        <MudButton @onclick="GoToStatistics"
-                   Size="Size.Large"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Insights">
-            See Statistics
-        </MudButton>
-    </MudItem>
-    
+        <MudItem xl="6" xs="6">
+            <MudButton @onclick="AddPriceAsync"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Settings">
+                Edit Price
+            </MudButton>
+        </MudItem>
+
+        <MudItem xl="6" xs="6">
+            <MudButton @onclick="AddApplianceAsync"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add">
+                Add Appliance
+            </MudButton>
+        </MudItem>
+
+        <MudItem xl="6" xs="6">
+            <MudButton @onclick="GoToStatistics"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Insights">
+                See Statistics
+            </MudButton>
+        </MudItem>
+
+    </MudStack>
     @if (!_appliances.Any())
     {
         <MudText Typo="Typo.h6">No appliances found.</MudText>
@@ -102,8 +101,8 @@
                                       AlignItems="AlignItems.Center"
                                       Justify="Justify.SpaceAround">
 
-                                <ApplianceConsumptionsMudItemsComponent 
-                                    Appliance="appliance" 
+                                <ApplianceConsumptionsMudItemsComponent
+                                    Appliance="appliance"
                                     Price="@_price"/>
 
                             </MudStack>
@@ -127,7 +126,7 @@
         _categories = await DbContext.Categories.ToListAsync();
         _appliances = await DbContext.Appliances.ToListAsync();
     }
-    
+
     private void GoToStatistics()
     {
         NavigationManager.NavigateTo("/statistics");

@@ -1,6 +1,4 @@
-﻿using WattHappens.Domain.Entities;
-
-namespace WattHappens.Web.Utilities;
+﻿namespace WattHappens.Web.Utilities;
 
 public static class Calculations
 {

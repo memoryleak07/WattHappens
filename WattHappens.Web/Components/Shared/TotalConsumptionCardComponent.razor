@@ -1,10 +1,7 @@
-@using WattHappens.Domain.Entities
-@using WattHappens.Web.Utilities
-
 <MudCard>
     <MudCardHeader>
         <MudText Typo="Typo.caption">
-            <MudIcon Size="Size.Small" 
+            <MudIcon Size="Size.Small"
                      Color="Color.Primary"
                      Icon="@Icons.Material.Filled.Spa"
                      Style="vertical-align: middle;"/>
@@ -133,7 +130,7 @@
                 (
                     Math.Round(appliances.Sum(a => Calculations.KilowattConsumptionPerWeek(a)), price.WattPrecision),
                     Math.Round(appliances.Sum(a => Calculations.CostPerWeek(a, price)), price.CostPrecision)
-                 ),
+                ),
                 PerMonth =
                 (
                     Math.Round(appliances.Sum(a => Calculations.KilowattConsumptionPerMonth(a)), price.WattPrecision),

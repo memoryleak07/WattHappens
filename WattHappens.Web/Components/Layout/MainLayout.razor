@@ -8,14 +8,23 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         @* <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/> *@
-        <MudIconButton Icon="@Icons.Material.Filled.Bolt" Color="Color.Primary" Edge="Edge.Start" OnClick="@((e) => GoHome())"/>
-        <MudText Typo="Typo.h5" Class="ml-3">WattHappens</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Bolt" Color="Color.Primary" Edge="Edge.Start" OnClick="@((e) => NavigateUrl("/"))"/>
+        <MudText Color="Color.Primary" Typo="Typo.h5" Class="ml-3">WattHappens</MudText>
         <MudSpacer/>
         <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle"/>
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
+        @* <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/> *@
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+                 Color="Color.Inherit">
+            <MudMenuItem OnClick="@((e) => NavigateUrl("/"))">
+                Home
+            </MudMenuItem>
+            <MudMenuItem OnClick="@((e) => NavigateUrl("/statistics"))">
+                Statistics
+            </MudMenuItem>
+        </MudMenu>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-    </MudDrawer>
+    @* <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2"> *@
+    @* </MudDrawer> *@
     <MudMainContent Class="mt-16 pa-4">
         @Body
     </MudMainContent>
@@ -29,7 +38,7 @@
 </div>
 
 @code {
-    private bool _drawerOpen = true;
+    // private bool _drawerOpen = true;
     private bool _isDarkMode = false;
     private MudTheme? _theme = null;
 
@@ -55,9 +64,9 @@
         _isDarkMode = !_isDarkMode;
     }
 
-    private void GoHome()
+    private void NavigateUrl(string url)
     {
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo(url);
     }
     
     private readonly PaletteLight _lightPalette = new()
