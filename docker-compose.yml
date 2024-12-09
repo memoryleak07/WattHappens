@@ -1,6 +1,13 @@
 ﻿services:
-  watthappens.web:
-    image: watthappens.web
+  watthappens-app:
+    image: watthappens-app-service
+    container_name: watthappens-app-service
+    ports:
+      - "5009:80"
+      - "5058:5058"
     build:
       context: .
       dockerfile: WattHappens.Web/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Data Source=mydb.db;
+      - ASPNETCORE_URLS=http://+:8080;http://+:5058
