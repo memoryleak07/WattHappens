@@ -1,0 +1,47 @@
+﻿@page "/statistics"
+
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+@using WattHappens.Application.Constants
+@using WattHappens.Domain.Entities
+@using WattHappens.Infrastructure.Data
+@using WattHappens.Web.Components.Shared
+
+<PageTitle>Statistics</PageTitle>
+
+<MudStack>
+    
+    @if (!_appliances.Any())
+    {
+        <MudText Typo="Typo.h6">No appliances found.</MudText>
+    }
+    else
+    {
+        <MudGrid Spacing="10" Justify="Justify.Center">
+            <MudItem xl="12" xs="12">
+                <TotalConsumptionCardComponent  
+                    Appliances="_appliances"
+                    Price="_price"/>
+            </MudItem>
+            
+            <MudItem xl="12" xs="12">
+                @* TODO Plot goes here *@
+            </MudItem>
+        </MudGrid>
+    }
+</MudStack>
+
+@code
+{
+    private ICollection<Appliance> _appliances = new List<Appliance>();
+    private Price _price = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _price = await DbContext.Prices.FirstAsync();
+        _appliances = await DbContext.Appliances.ToListAsync();
+    }
+}

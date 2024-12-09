@@ -23,11 +23,11 @@
                 <MudNumericField @bind-value="_price.CostPrecision"
                                  Label="Cost Decimal Precision"
                                  Adornment="Adornment.End"
-                                 AdornmentText="integer"
+                                 AdornmentText="int"
                                  AdornmentColor="Color.Default"
                                  Step="1"
                                  Min="0"
-                                 Max="5"
+                                 Max="4"
                                  Culture="CultureInfo.CurrentCulture"
                                  Required="true"
                                  Variant="Variant.Outlined"
@@ -38,11 +38,11 @@
                 <MudNumericField @bind-value="_price.WattPrecision"
                                  Label="Watt Decimal Precision"
                                  Adornment="Adornment.End"
-                                 AdornmentText="integer"
+                                 AdornmentText="int"
                                  AdornmentColor="Color.Default"
                                  Step="1"
                                  Min="0"
-                                 Max="5"
+                                 Max="4"
                                  Culture="CultureInfo.CurrentCulture"
                                  Required="true"
                                  Variant="Variant.Outlined"
@@ -53,7 +53,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton Style="padding: 20px; margin: 5px" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Tertiary" Disabled="DisableSubmit" OnClick="Submit">
+        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Primary" Disabled="DisableSubmit" OnClick="Submit">
             Update
         </MudButton>
     </DialogActions>

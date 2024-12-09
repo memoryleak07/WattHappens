@@ -1,19 +1,20 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
-<MudThemeProvider Theme="@_theme" IsDarkMode="false"/>
+<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode"/>
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+        @* <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/> *@
+        <MudIconButton Icon="@Icons.Material.Filled.Bolt" Color="Color.Primary" Edge="Edge.Start" OnClick="@((e) => GoHome())"/>
         <MudText Typo="Typo.h5" Class="ml-3">WattHappens</MudText>
         <MudSpacer/>
-        @* <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle"/> *@
+        <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle"/>
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu/>
     </MudDrawer>
     <MudMainContent Class="mt-16 pa-4">
         @Body
@@ -29,7 +30,7 @@
 
 @code {
     private bool _drawerOpen = true;
-    // private bool _isDarkMode = false;
+    private bool _isDarkMode = false;
     private MudTheme? _theme = null;
 
     protected override void OnInitialized()
@@ -39,22 +40,26 @@
         _theme = new()
         {
             PaletteLight = _lightPalette,
-            // PaletteDark = _darkPalette,
+            PaletteDark = _darkPalette,
             LayoutProperties = new LayoutProperties()
         };
     }
-
-
-    private void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    // private void DarkModeToggle()
+    
+    // private void DrawerToggle()
     // {
-    //     _isDarkMode = !_isDarkMode;
+    //     _drawerOpen = !_drawerOpen;
     // }
 
+    private void DarkModeToggle()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+    private void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+    
     private readonly PaletteLight _lightPalette = new()
     {
         Black = "#110e2d",
@@ -63,13 +68,14 @@
         DrawerBackground = "#ffffff",
         GrayLight = "#e8e8e8",
         GrayLighter = "#f9f9f9",
+        Background = "#EDE7F6",
     };
 
     private readonly PaletteDark _darkPalette = new()
     {
         Primary = "#7e6fff",
         Surface = "#1e1e2d",
-        Background = "#1a1a27",
+        Background = "#000000",
         BackgroundGray = "#151521",
         AppbarText = "#92929f",
         AppbarBackground = "rgba(26,26,39,0.8)",
@@ -94,10 +100,10 @@
         OverlayLight = "#1e1e2d80",
     };
 
-    // public string DarkLightModeButtonIcon => _isDarkMode switch
-    // {
-    //     true => Icons.Material.Rounded.AutoMode,
-    //     false => Icons.Material.Outlined.DarkMode,
-    // };
+    public string DarkLightModeButtonIcon => _isDarkMode switch
+    {
+        true => Icons.Material.Rounded.AutoMode,
+        false => Icons.Material.Outlined.DarkMode,
+    };
 
 }

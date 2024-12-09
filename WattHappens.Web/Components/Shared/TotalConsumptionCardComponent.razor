@@ -1,17 +1,19 @@
 @using WattHappens.Domain.Entities
 @using WattHappens.Web.Utilities
 
-<MudCard Style="background-color: #CFD8DC">
+<MudCard>
     <MudCardHeader>
         <MudText Typo="Typo.caption">
-            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Insights"
+            <MudIcon Size="Size.Small" 
+                     Color="Color.Primary"
+                     Icon="@Icons.Material.Filled.Spa"
                      Style="vertical-align: middle;"/>
-            <span style="color: slategrey;">Total Consumption</span>
+            Total Consumption
         </MudText>
     </MudCardHeader>
     <MudCardContent>
 
-        <MudGrid>
+        <MudGrid Justify="Justify.SpaceAround" Spacing="6">
 
             <MudItem xs="6">
                 <MudText Typo="Typo.caption">Total Load</MudText>
@@ -29,7 +31,11 @@
             <MudFlexBreak/>
 
             <MudItem xs="3">
-                <MudText Typo="Typo.caption">Per Day</MudText>
+                <MudText Typo="Typo.caption">
+                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                             Style="vertical-align: middle;"/>
+                    <span style="color: slategrey; font-size: 0.7rem">Per Day</span>
+                </MudText>
                 <MudText Typo="Typo.body2">
                     @_consumptionDto.PerDay.kWh
                     <span style="font-size: 0.8rem; color: slategrey;">kW</span>
@@ -42,7 +48,11 @@
             </MudItem>
 
             <MudItem xs="3">
-                <MudText Typo="Typo.caption">Per Week</MudText>
+                <MudText Typo="Typo.caption">
+                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                             Style="vertical-align: middle;"/>
+                    <span style="color: slategrey; font-size: 0.7rem">Per Week</span>
+                </MudText>
                 <MudText Typo="Typo.body2">
                     @_consumptionDto.PerWeek.kWh
                     <span style="font-size: 0.8rem; color: slategrey;">kW</span>
@@ -54,7 +64,11 @@
             </MudItem>
 
             <MudItem xs="3">
-                <MudText Typo="Typo.caption">Per Month</MudText>
+                <MudText Typo="Typo.caption">
+                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                             Style="vertical-align: middle;"/>
+                    <span style="color: slategrey; font-size: 0.7rem">Per Month</span>
+                </MudText>
                 <MudText Typo="Typo.body2">
                     @_consumptionDto.PerMonth.kWh
                     <span style="font-size: 0.8rem; color: slategrey;">kW</span>
@@ -66,7 +80,11 @@
             </MudItem>
 
             <MudItem xs="3">
-                <MudText Typo="Typo.caption">Per Year</MudText>
+                <MudText Typo="Typo.caption">
+                    <MudIcon Size="Size.Small" Icon="@Icons.Material.Outlined.EnergySavingsLeaf"
+                             Style="vertical-align: middle;"/>
+                    <span style="color: slategrey; font-size: 0.7rem">Per Year</span>
+                </MudText>
                 <MudText Typo="Typo.body2">
                     @_consumptionDto.PerYear.kWh
                     <span style="font-size: 0.8rem; color: slategrey;">kW</span>

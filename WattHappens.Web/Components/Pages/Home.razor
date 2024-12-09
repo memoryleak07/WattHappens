@@ -3,6 +3,7 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
 @using Microsoft.EntityFrameworkCore
 @using WattHappens.Application.Constants
 @using WattHappens.Domain.Entities
@@ -16,7 +17,7 @@
     <MudItem xl="6" xs="6">
         <MudButton @onclick="AddPriceAsync"
                    Size="Size.Large"
-                   Color="Color.Tertiary"
+                   Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Settings">
             Edit Price
         </MudButton>
@@ -25,22 +26,27 @@
     <MudItem xl="6" xs="6">
         <MudButton @onclick="AddApplianceAsync"
                    Size="Size.Large"
-                   Color="Color.Tertiary"
+                   Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Add">
             Add Appliance
         </MudButton>
     </MudItem>
 
+    <MudItem xl="6" xs="6">
+        <MudButton @onclick="GoToStatistics"
+                   Size="Size.Large"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Insights">
+            See Statistics
+        </MudButton>
+    </MudItem>
+    
     @if (!_appliances.Any())
     {
         <MudText Typo="Typo.h6">No appliances found.</MudText>
     }
     else
     {
-        <TotalConsumptionCardComponent
-            Appliances="_appliances"
-            Price="_price"/>
-
         <MudGrid Spacing="10" Justify="Justify.Center">
             @foreach (var appliance in _appliances)
             {
@@ -52,7 +58,7 @@
                                 <MudChip T="string"
                                          Size="Size.Small"
                                          Icon="@Icons.Material.Outlined.Power"
-                                         Color="Color.Transparent">
+                                         Style="background-color: #673AB7; color: white">
                                     @($"{appliance.WattPowerConsumption} W")
                                 </MudChip>
                                 @if (appliance.Quantity > 1)
@@ -60,14 +66,14 @@
                                     <MudChip T="string"
                                              Size="Size.Small"
                                              Icon="@Icons.Material.Outlined.Numbers"
-                                             Color="Color.Transparent">
+                                             Style="background-color: #673AB7; color: white">
                                         @($"x{appliance.Quantity}")
                                     </MudChip>
                                 }
                                 <MudChip T="EnCategory"
                                          Size="Size.Small"
                                          Icon="@Icons.Material.Outlined.Category"
-                                         Color="Color.Transparent">
+                                         Style="background-color: #673AB7; color: white">
                                     @appliance.Category
                                 </MudChip>
                             </CardHeaderContent>
@@ -90,13 +96,15 @@
                         </MudCardContent>
 
                         <MudDivider/>
-                        <MudCardContent Class="pa-4" Style="background-color:#CFD8DC">
+                        <MudCardContent Class="pa-4" Style="background-color:#B49BDF">
                             <MudStack Row="true"
                                       Spacing="2"
                                       AlignItems="AlignItems.Center"
                                       Justify="Justify.SpaceAround">
 
-                                <ApplianceConsumptionsMudItemsComponent Appliance="appliance" Price="@_price"/>
+                                <ApplianceConsumptionsMudItemsComponent 
+                                    Appliance="appliance" 
+                                    Price="@_price"/>
 
                             </MudStack>
                         </MudCardContent>
@@ -118,6 +126,11 @@
         _price = await DbContext.Prices.FirstAsync();
         _categories = await DbContext.Categories.ToListAsync();
         _appliances = await DbContext.Appliances.ToListAsync();
+    }
+    
+    private void GoToStatistics()
+    {
+        NavigationManager.NavigateTo("/statistics");
     }
 
     private async Task RemoveApplianceAsync(Appliance appliance)

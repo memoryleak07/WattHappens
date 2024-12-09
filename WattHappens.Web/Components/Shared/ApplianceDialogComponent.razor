@@ -8,7 +8,7 @@
 
             <MudItem xs="12">
                 <MudSelect @bind-Value="_appliance.Category"
-                           AdornmentColor="Color.Tertiary"
+                           AdornmentColor="Color.Primary"
                            HelperText="Category"
                            Clearable="true"
                            Dense="true">
@@ -30,7 +30,7 @@
             <MudItem xs="12">
                 <MudTextField @bind-Value="_appliance.Name"
                               HelperText="Name of the appliance"
-                              AdornmentColor="Color.Tertiary"
+                              AdornmentColor="Color.Primary"
                               Variant="Variant.Text"/>
             </MudItem>
 
@@ -38,7 +38,7 @@
 
             <MudItem xs="6">
                 <MudSelect @bind-Value="_isWatts"
-                           AdornmentColor="Color.Tertiary"
+                           AdornmentColor="Color.Primary"
                            HelperText="Unit"
                            Variant="Variant.Text">
                     <MudSelectItem Value="true">Watt (W)</MudSelectItem>
@@ -50,7 +50,7 @@
                 <MudNumericField @bind-Value="PowerConsumption"
                                  HelperText="Consumption"
                                  Variant="Variant.Text"
-                                 AdornmentColor="Color.Tertiary"
+                                 AdornmentColor="Color.Primary"
                                  Min="0"
                                  Max="999999999"
                                  Adornment="Adornment.End"
@@ -63,7 +63,7 @@
                 <MudNumericField @bind-Value="_appliance.Quantity"
                                  HelperText="Quantity"
                                  Variant="Variant.Text"
-                                 AdornmentColor="Color.Tertiary"
+                                 AdornmentColor="Color.Primary"
                                  Min="1"
                                  Max="99999999"
                                  Adornment="Adornment.End"
@@ -74,7 +74,7 @@
                 <MudNumericField @bind-Value="_appliance.Efficiency"
                                  HelperText="Efficiency in %"
                                  Variant="Variant.Text"
-                                 AdornmentColor="Color.Tertiary"
+                                 AdornmentColor="Color.Primary"
                                  Min="1"
                                  Max="100"
                                  Adornment="Adornment.End"
@@ -83,7 +83,7 @@
 
             <MudItem xs="4">
                 <MudSelect @bind-Value="_appliance.ClassEnergy"
-                           AdornmentColor="Color.Tertiary"
+                           AdornmentColor="Color.Primary"
                            HelperText="Energy efficiency class">
                     @foreach (var energyClass in Enum.GetValues<EnEnergyClass>())
                     {
@@ -96,10 +96,11 @@
             
             <MudItem xs="6">
                 <MudText>
-                    <MudInputLabel Style="font-size: small">Usage per Day</MudInputLabel>
-                    <MudIcon
-                        Color="Color.Tertiary"
-                        Icon="@Icons.Material.Filled.Alarm"></MudIcon>
+                    <MudInputLabel Style="font-size: small; padding: 3px;">Usage per Day</MudInputLabel>
+                    <MudIcon Color="Color.Primary"
+                             Icon="@Icons.Material.Filled.Alarm"
+                             Style="vertical-align: middle;"/>
+                    @($"{HoursUsedPerDay} {(_isHours ? "hr" : "min")}")
                 </MudText>
             </MudItem>
 
@@ -119,7 +120,7 @@
                            Step="@(_isHours ? 0.5 : 5)"
                            ValueLabel="true"
                            Size="Size.Small"
-                           Color="Color.Tertiary"
+                           Color="Color.Primary"
                            Culture="@CultureInfo.CurrentCulture"
                            ValueLabelFormat="@(_isHours ? "0.# hr" : "0 min")"
                            TickMarks="true"
@@ -136,7 +137,7 @@
                                  Max="7"
                                  Step="1"
                                  Adornment="Adornment.End"
-                                 AdornmentColor="Color.Tertiary"
+                                 AdornmentColor="Color.Primary"
                                  IconSize="Size.Small"
                                  AdornmentIcon="@Icons.Material.Filled.CalendarToday"/>
             </MudItem>
@@ -149,7 +150,7 @@
                                  Max="30"
                                  Step="1"
                                  Adornment="Adornment.End"
-                                 AdornmentColor="Color.Tertiary"
+                                 AdornmentColor="Color.Primary"
                                  IconSize="Size.Small"
                                  AdornmentIcon="@Icons.Material.Filled.CalendarMonth"/>
             </MudItem>
@@ -162,7 +163,7 @@
                                  Max="12"
                                  Step="1"
                                  Adornment="Adornment.End"
-                                 AdornmentColor="Color.Tertiary"
+                                 AdornmentColor="Color.Primary"
                                  IconSize="Size.Small"
                                  AdornmentIcon="@Icons.Material.Filled.CalendarViewMonth"/>
             </MudItem>
@@ -171,7 +172,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton Style="padding: 20px; margin: 5px" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Tertiary" Disabled="DisableSubmit" OnClick="Submit">@(IsEditMode ? "Update" : "Save")</MudButton>
+        <MudButton Style="padding: 20px; margin: 5px" Color="Color.Primary" Disabled="DisableSubmit" OnClick="Submit">@(IsEditMode ? "Update" : "Save")</MudButton>
     </DialogActions>
 
 </MudDialog>
